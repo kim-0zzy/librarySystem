@@ -1,6 +1,8 @@
-package com.example.libraryProject.Repository;
+package com.example.libraryProject.Repository.JPQL;
 
 import com.example.libraryProject.Entity.Borrow;
+import com.example.libraryProject.Exception.NotFoundResultException;
+import com.example.libraryProject.Repository.BorrowRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -9,16 +11,28 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class JPQLBorrowRepository {
+public class JPQLBorrowRepository implements BorrowRepository {
 
     private final EntityManager em;
 
+    @Override
     public void save(Borrow borrow){
         em.persist(borrow);
     }
 
-    public Borrow findById(String id){
+    @Override
+    public Borrow findById(Long id){
         return em.find(Borrow.class, id);
+    }
+
+    @Override
+    public List<Borrow> findBorrowByBookCondition(String cond) throws NotFoundResultException {
+        return null;
+    }
+
+    @Override
+    public List<Borrow> findBorrowByMemberCondition(String cond) throws NotFoundResultException {
+        return null;
     }
 
     public List<Borrow> findBorrowByMemberCode(String code) throws Exception{
