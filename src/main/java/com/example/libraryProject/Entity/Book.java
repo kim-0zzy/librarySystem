@@ -14,6 +14,7 @@ import java.util.List;
 public class Book {
 
     @Id @GeneratedValue
+    @Column(name = "book_id")
     private Long id;
     private String name;
     private String code;
@@ -29,8 +30,8 @@ public class Book {
         this.price = price;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "borrow")
-    private List<Borrow> borrows = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+    private List<Borrow> borrow = new ArrayList<>();
 
     public void setState(){
         this.state = !this.state;

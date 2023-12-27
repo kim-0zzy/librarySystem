@@ -1,13 +1,16 @@
 package com.example.libraryProject.Repository.JPQL;
 
+import com.example.libraryProject.DTO.SearchCondition;
 import com.example.libraryProject.Entity.Borrow;
 import com.example.libraryProject.Exception.NotFoundResultException;
 import com.example.libraryProject.Repository.BorrowRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,21 +24,22 @@ public class JPQLBorrowRepository implements BorrowRepository {
     }
 
     @Override
-    public Borrow findById(Long id){
-        return em.find(Borrow.class, id);
+    public Optional<Borrow> findById(Long id){
+        Borrow borrow = em.find(Borrow.class, id);
+        return Optional.ofNullable(borrow);
     }
 
     @Override
-    public List<Borrow> findBorrowByBookCondition(String cond) throws NotFoundResultException {
+    public List<Borrow> findBorrowByBookCondition(SearchCondition cond) throws NotFoundResultException {
         return null;
     }
 
     @Override
-    public List<Borrow> findBorrowByMemberCondition(String cond) throws NotFoundResultException {
+    public List<Borrow> findBorrowByMemberCondition(SearchCondition cond) throws NotFoundResultException {
         return null;
     }
 
-    public List<Borrow> findBorrowByMemberCode(String code) throws Exception{
+    public List<Borrow> findBorrowByMemberCode(String code) throws NotFoundResultException{
         try{
             return em.createQuery("select b, m.code, m.username, bk.code, bk.name, bk.price, bk.state" +
                             " from Borrow b" +
@@ -49,7 +53,7 @@ public class JPQLBorrowRepository implements BorrowRepository {
         }
     }
 
-    public List<Borrow> findBorrowByUsernameWithPassword(String name, String password) throws Exception{
+    public List<Borrow> findBorrowByUsernameWithPassword(String name, String password) throws NotFoundResultException{
         try{
             return em.createQuery("select b, m.code, m.username, bk.code, bk.name, bk.price, bk.state" +
                             " from Borrow b" +
@@ -64,7 +68,7 @@ public class JPQLBorrowRepository implements BorrowRepository {
         }
     }
 
-    public List<Borrow> findBorrowByBookCode(String code) throws Exception{
+    public List<Borrow> findBorrowByBookCode(String code) throws NotFoundResultException{
         try{
             return em.createQuery("select b, m.code, m.username, bk.code, bk.name, bk.price, bk.state" +
                     " from Borrow b" +
@@ -78,7 +82,7 @@ public class JPQLBorrowRepository implements BorrowRepository {
         }
     }
 
-    public List<Borrow> findBorrowByBookName(String name) throws Exception{
+    public List<Borrow> findBorrowByBookName(String name) throws NotFoundResultException{
         try{
             return em.createQuery("select b, m.code, m.username, bk.code, bk.name, bk.price, bk.state" +
                             " from Borrow b" +

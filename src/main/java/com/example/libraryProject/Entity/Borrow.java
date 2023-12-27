@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Borrow {
     @Id @GeneratedValue
+    @Column(name = "borrow_id")
     private Long id;
     private LocalDate borrowDate;
     private LocalDate limitDate;
@@ -26,11 +27,11 @@ public class Borrow {
 
     private void setMember(Member member){
         this.member = member;
-        member.getBorrows().add(this);
+        member.getBorrow().add(this);
     }
     private void setBook(Book book){
         this.book = book;
-        book.getBorrows().add(this);
+        book.getBorrow().add(this);
     }
 
     public Borrow(int limitDays) {

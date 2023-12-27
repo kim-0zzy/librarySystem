@@ -4,13 +4,14 @@ import com.example.libraryProject.Entity.Book;
 import com.example.libraryProject.Exception.NotFoundResultException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookRepository {
 
     void save(Book book);
+    Optional<Book> findById(Long id) throws Exception;
     List<Book> findAll();
-    Book findById(Long id) throws NotFoundResultException;
-    List<Book> findByBookName(String bookName) throws NotFoundResultException;
-    Book findByCode(String code) throws NotFoundResultException;
+    List<Book> findByBookName(String bookName) throws Exception;
+    List<Book> findByCode(String code) throws Exception;
 
 }

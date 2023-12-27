@@ -14,6 +14,7 @@ import java.util.List;
 public class Member {
 
     @Id @GeneratedValue
+    @Column(name = "member_id")
     private Long id;
 
     @Embedded
@@ -32,7 +33,7 @@ public class Member {
         this.code = code;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "borrow")
-    private List<Borrow> borrows = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    private List<Borrow> borrow = new ArrayList<>();
 }
 

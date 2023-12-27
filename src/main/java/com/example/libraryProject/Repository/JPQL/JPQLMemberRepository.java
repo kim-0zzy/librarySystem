@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,8 +20,9 @@ public class JPQLMemberRepository implements MemberRepository {
         em.persist(member);
     }
     @Override
-    public Member findById(Long id){
-        return em.find(Member.class, id);
+    public Optional<Member> findById(Long id){
+        Member member = em.find(Member.class, id);
+        return Optional.ofNullable(member);
     }
     @Override
     public List<Member> findAll(){
