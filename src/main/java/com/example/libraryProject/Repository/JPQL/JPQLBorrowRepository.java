@@ -1,5 +1,6 @@
 package com.example.libraryProject.Repository.JPQL;
 
+import com.example.libraryProject.DTO.ReturnBorrowDTO;
 import com.example.libraryProject.DTO.SearchCondition;
 import com.example.libraryProject.Entity.Borrow;
 import com.example.libraryProject.Exception.NotFoundResultException;
@@ -30,69 +31,85 @@ public class JPQLBorrowRepository implements BorrowRepository {
     }
 
     @Override
-    public List<Borrow> findBorrowByBookCondition(SearchCondition cond) throws NotFoundResultException {
+    public List<ReturnBorrowDTO> findBorrowByBookCondition(SearchCondition cond) throws NotFoundResultException {
         return null;
     }
 
     @Override
-    public List<Borrow> findBorrowByMemberCondition(SearchCondition cond) throws NotFoundResultException {
-        return null;
-    }
-
-    public List<Borrow> findBorrowByMemberCode(String code) throws NotFoundResultException{
+    public List<ReturnBorrowDTO> findBorrowByMemberCondition(SearchCondition cond) throws NotFoundResultException {
         try{
-            return em.createQuery("select b, m.code, m.username, bk.code, bk.name, bk.price, bk.state" +
+//            b.id, b.borrowDate, b.limitDate, m.code, m.username, bk.code, bk.name, bk.state
+            return em.createQuery("select new com.example.libraryProject.DTO.ReturnBorrowDTO" +
+                            "(b.id, b.borrowDate, b.limitDate, m.code, m.username, bk.code, bk.name, bk.state)" +
                             " from Borrow b" +
-                            " join fetch b.member m" +
-                            " join fetch b.book bk" +
-                            " where m.code =: code ", Borrow.class)
-                    .setParameter("code", code)
+                            " join b.member m" +
+                            " join b.book bk" +
+                            " where m.code =: code ", ReturnBorrowDTO.class)
+                    .setParameter("code", cond.getMemberCode())
                     .getResultList();
         }catch (Exception e){
             return null;
         }
     }
-
-    public List<Borrow> findBorrowByUsernameWithPassword(String name, String password) throws NotFoundResultException{
-        try{
-            return em.createQuery("select b, m.code, m.username, bk.code, bk.name, bk.price, bk.state" +
-                            " from Borrow b" +
-                            " join fetch b.member m" +
-                            " join fetch b.book bk" +
-                            " where m.username =: username and m.password =: password ", Borrow.class)
-                    .setParameter("username", name)
-                    .setParameter("password", password)
-                    .getResultList();
-        }catch (Exception e){
-            return null;
-        }
-    }
-
-    public List<Borrow> findBorrowByBookCode(String code) throws NotFoundResultException{
-        try{
-            return em.createQuery("select b, m.code, m.username, bk.code, bk.name, bk.price, bk.state" +
-                    " from Borrow b" +
-                    " join fetch b.member m" +
-                    " join fetch b.book bk" +
-                    " where bk.code =: code", Borrow.class)
-                    .setParameter("code", code)
-                    .getResultList();
-        }catch (Exception e){
-            return null;
-        }
-    }
-
-    public List<Borrow> findBorrowByBookName(String name) throws NotFoundResultException{
-        try{
-            return em.createQuery("select b, m.code, m.username, bk.code, bk.name, bk.price, bk.state" +
-                            " from Borrow b" +
-                            " join fetch b.member m" +
-                            " join fetch b.book bk" +
-                            " where bk.name =: name", Borrow.class)
-                    .setParameter("name", name)
-                    .getResultList();
-        }catch (Exception e){
-            return null;
-        }
-    }
+//
+//    public List<ReturnBorrowDTO> findBorrowByMemberCode(String code) throws NotFoundResultException{
+//        // -> Condition 메서드로 옮긴 후 projection 적용 후 동적쿼리로 변환해야함. ↓↓↓↓↓↓
+//        try{
+////            b.id, b.borrowDate, b.limitDate, m.code, m.username, bk.code, bk.name, bk.state
+//            return em.createQuery("select new com.example.libraryProject.DTO.ReturnBorrowDTO" +
+//                            "(b.id, b.borrowDate, b.limitDate, m.code, m.username, bk.code, bk.name, bk.state)" +
+//                            " from Borrow b" +
+//                            " join b.member m" +
+//                            " join b.book bk" +
+//                            " where m.code =: code ", ReturnBorrowDTO.class)
+//                    .setParameter("code", code)
+//                    .getResultList();
+//        }catch (Exception e){
+//            return null;
+//        }
+//    }
+//
+//    public List<Borrow> findBorrowByUsernameWithPassword(String name, String password) throws NotFoundResultException{
+//        try{
+//            return em.createQuery("select b, m.code, m.username, bk.code, bk.name, bk.price, bk.state" +
+//                            " from Borrow b" +
+//                            " join fetch b.member m" +
+//                            " join fetch b.book bk" +
+//                            " where m.username =: username and m.password =: password ", Borrow.class)
+//                    .setParameter("username", name)
+//                    .setParameter("password", password)
+//                    .getResultList();
+//        }catch (Exception e){
+//            return null;
+//        }
+//    }
+//
+//    public List<Borrow> findBorrowByBookCode(String code) throws NotFoundResultException{
+//        try{
+//            return em.createQuery("select b, m.code, m.username, bk.code, bk.name, bk.price, bk.state" +
+//                    " from Borrow b" +
+//                    " join fetch b.member m" +
+//                    " join fetch b.book bk" +
+//                    " where bk.code =: code", Borrow.class)
+//                    .setParameter("code", code)
+//                    .getResultList();
+//        }catch (Exception e){
+//            return null;
+//        }
+//    }
+//
+//    public List<Borrow> findBorrowByBookName(String name) throws NotFoundResultException{
+//        try{
+//            return em.createQuery("select b, m.code, m.username, bk.code, bk.name, bk.price, bk.state" +
+//                            " from Borrow b" +
+//                            " join fetch b.member m" +
+//                            " join fetch b.book bk" +
+//                            " where bk.name =: name", Borrow.class)
+//                    .setParameter("name", name)
+//                    .getResultList();
+//        }catch (Exception e){
+//            return null;
+//        }
+//    }
+    // -> Condition 메서드로 옮긴 후 projection 적용 후 동적쿼리로 변환해야함. ↑↑↑↑↑↑
 }

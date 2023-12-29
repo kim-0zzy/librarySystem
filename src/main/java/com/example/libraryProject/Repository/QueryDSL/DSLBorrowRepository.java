@@ -1,5 +1,6 @@
 package com.example.libraryProject.Repository.QueryDSL;
 
+import com.example.libraryProject.DTO.ReturnBorrowDTO;
 import com.example.libraryProject.DTO.SearchCondition;
 import com.example.libraryProject.Entity.Borrow;
 import com.example.libraryProject.Entity.QBook;
@@ -7,6 +8,7 @@ import com.example.libraryProject.Entity.QBorrow;
 import com.example.libraryProject.Entity.QMember;
 import com.example.libraryProject.Exception.NotFoundResultException;
 import com.example.libraryProject.Repository.BorrowRepository;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -36,26 +38,38 @@ public class DSLBorrowRepository implements BorrowRepository {
     }
 
     @Override
-    public List<Borrow> findBorrowByBookCondition(SearchCondition cond) throws NotFoundResultException {
-//        return jpaQueryFactory
-//                .select(QBorrow.borrow.id, QBorrow.borrow.borrowDate, QBorrow.borrow.limitDate,
-//                        QMember.member.code, QMember.member.username,
-//                        QBook.book.code, QBook.book.name, QBook.book.state)
-//                .from(QBorrow.borrow)
-//                .where(
-//                        bookCodeEq(cond.getBookCode()),
-//                        bookNameEq(cond.getBookName()))
-//                .join(QBorrow.borrow.book, QBook.book)
-//                .join(QBorrow.borrow.member, QMember.member)
-//                .fetch();
-        return null;
+    public List<ReturnBorrowDTO> findBorrowByBookCondition(SearchCondition cond) throws NotFoundResultException {
+        return jpaQueryFactory // 반환용 DTO 만들어서 생성자 반환 방식 사용하기.
+                .select(Projections.constructor(ReturnBorrowDTO.class,
+                                QBorrow.borrow.id, QBorrow.borrow.borrowDate, QBorrow.borrow.limitDate,
+                                QMember.member.code, QMember.member.username,
+                                QBook.book.code, QBook.book.name, QBook.book.state        )
+                        )
+                .from(QBorrow.borrow)
+                .where(
+                        bookCodeEq(cond.getBookCode()),
+                        bookNameEq(cond.getBookName()))
+                .join(QBorrow.borrow.book, QBook.book)
+                .join(QBorrow.borrow.member, QMember.member)
+                .fetch();
     }
 
     @Override
-    public List<Borrow> findBorrowByMemberCondition(SearchCondition cond) throws NotFoundResultException {
-        return null;
+    public List<ReturnBorrowDTO> findBorrowByMemberCondition(SearchCondition cond) throws NotFoundResultException {
+        return jpaQueryFactory
+                .select(Projections.constructor(ReturnBorrowDTO.class,
+                        QBorrow.borrow.id, QBorrow.borrow.borrowDate, QBorrow.borrow.limitDate,
+                        QMember.member.code, QMember.member.username,
+                        QBook.book.code, QBook.book.name, QBook.book.state        )
+                )
+                .from(QBorrow.borrow)
+                .where(
+                        memberCodeEq(cond.getMemberCode()),
+                        memberNameAndTelEq(cond.getMemberName(), cond.getMemberTel()))
+                .join(QBorrow.borrow.book, QBook.book)
+                .join(QBorrow.borrow.member, QMember.member)
+                .fetch();
     }
-
 
     private BooleanExpression bookNameEq(String bookName) {
         if (StringUtils.hasText(bookName)) {
