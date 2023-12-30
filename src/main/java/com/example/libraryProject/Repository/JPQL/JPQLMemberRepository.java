@@ -30,26 +30,21 @@ public class JPQLMemberRepository implements MemberRepository {
                 .getResultList();
     }
     @Override
-    public Member findByCode(String code) throws NotFoundResultException {
-        try{
-            return em.createQuery("select m from Member m where m.code =: code"
+    public Optional<Member> findByCode(String code){
+        Member searchMember = em.createQuery("select m from Member m where m.code =: code"
                             , Member.class)
                     .setParameter("code", code)
                     .getSingleResult();
-        }catch (Exception e){
-            return null;
-        }
+        return Optional.ofNullable(searchMember);
     }
+
     @Override
-    public Member findByUsernameAndTel(String username, String tel) throws NotFoundResultException {
-        try{
-            return em.createQuery("select m from Member m where m.username =: username and m.tel =: tel"
+    public Optional<Member> findByUsernameAndTel(String username, String tel){
+        Member searchMember = em.createQuery("select m from Member m where m.username =: username and m.tel =: tel"
                             , Member.class)
                     .setParameter("username", username)
                     .setParameter("tel", tel)
                     .getSingleResult();
-        }catch (Exception e){
-            return null;
-        }
+        return Optional.ofNullable(searchMember);
     }
 }

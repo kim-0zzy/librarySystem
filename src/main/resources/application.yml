@@ -1,0 +1,30 @@
+
+spring:
+  datasource:
+    hikari:
+      username:
+        maximum-pool-size: 4
+    url: jdbc:postgresql://localhost:5432/lib-project
+    username: postgres
+    password: db0zzy9433^^
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+      # ??? ? ??? ??? ?? (???? create-drop)
+    properties:
+      hibernate:
+        # show_sql: true -> printf ??? sql ??
+        format_sql: true
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+server:
+  servlet:
+    encoding:
+      force-response: true
+logging.level:
+  org.hibernate.SQL: debug

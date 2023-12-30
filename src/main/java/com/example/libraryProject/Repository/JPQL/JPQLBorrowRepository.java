@@ -7,7 +7,6 @@ import com.example.libraryProject.Exception.NotFoundResultException;
 import com.example.libraryProject.Repository.BorrowRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,6 +27,11 @@ public class JPQLBorrowRepository implements BorrowRepository {
     public Optional<Borrow> findById(Long id){
         Borrow borrow = em.find(Borrow.class, id);
         return Optional.ofNullable(borrow);
+    }
+
+    @Override
+    public List<Borrow> findAll() {
+        return em.createQuery("select b from Borrow b").getResultList();
     }
 
     @Override

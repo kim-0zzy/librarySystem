@@ -10,6 +10,6 @@ public interface MemberRepository {
     void save(Member member);
     Optional<Member> findById(Long id);
     List<Member> findAll() throws NotFoundResultException;
-    Member findByCode(String code) throws NotFoundResultException;
-    Member findByUsernameAndTel(String username, String tel) throws NotFoundResultException;
+    Optional<Member> findByCode(String code);
+    Optional<Member> findByUsernameAndTel(String username, String tel);
 }

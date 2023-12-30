@@ -19,8 +19,8 @@ public class Book {
     private String name;
     private String code;
     private String place;
-    private boolean state;
     private int price;
+    private boolean state;
 
     public Book(String name, String code, String place, int price) {
         this.name = name;

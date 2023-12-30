@@ -21,6 +21,8 @@ public class QManager extends EntityPathBase<Manager> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath managerName = createString("managerName");
+
     public final StringPath password = createString("password");
 
     public final StringPath role = createString("role");

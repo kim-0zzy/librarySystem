@@ -13,14 +13,20 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.libraryProject.Entity.QBook.book;
+import static com.example.libraryProject.Entity.QBorrow.borrow;
+import static com.example.libraryProject.Entity.QMember.member;
+
 @Repository
 @RequiredArgsConstructor
+@Primary
 public class DSLBorrowRepository implements BorrowRepository {
 
     private final EntityManager em;
@@ -38,19 +44,24 @@ public class DSLBorrowRepository implements BorrowRepository {
     }
 
     @Override
+    public List<Borrow> findAll() {
+        return jpaQueryFactory.selectFrom(borrow).fetch();
+    }
+
+    @Override
     public List<ReturnBorrowDTO> findBorrowByBookCondition(SearchCondition cond) throws NotFoundResultException {
-        return jpaQueryFactory // 반환용 DTO 만들어서 생성자 반환 방식 사용하기.
+        return jpaQueryFactory
                 .select(Projections.constructor(ReturnBorrowDTO.class,
-                                QBorrow.borrow.id, QBorrow.borrow.borrowDate, QBorrow.borrow.limitDate,
-                                QMember.member.code, QMember.member.username,
-                                QBook.book.code, QBook.book.name, QBook.book.state        )
+                                borrow.id, borrow.borrowDate, borrow.limitDate,
+                                member.code, member.username,
+                                book.code, book.name, book.state        )
                         )
-                .from(QBorrow.borrow)
+                .from(borrow)
                 .where(
                         bookCodeEq(cond.getBookCode()),
                         bookNameEq(cond.getBookName()))
-                .join(QBorrow.borrow.book, QBook.book)
-                .join(QBorrow.borrow.member, QMember.member)
+                .join(borrow.book, book)
+                .join(borrow.member, member)
                 .fetch();
     }
 
@@ -58,43 +69,43 @@ public class DSLBorrowRepository implements BorrowRepository {
     public List<ReturnBorrowDTO> findBorrowByMemberCondition(SearchCondition cond) throws NotFoundResultException {
         return jpaQueryFactory
                 .select(Projections.constructor(ReturnBorrowDTO.class,
-                        QBorrow.borrow.id, QBorrow.borrow.borrowDate, QBorrow.borrow.limitDate,
-                        QMember.member.code, QMember.member.username,
-                        QBook.book.code, QBook.book.name, QBook.book.state        )
+                        borrow.id, borrow.borrowDate, borrow.limitDate,
+                        member.code, member.username,
+                        book.code, book.name, book.state        )
                 )
-                .from(QBorrow.borrow)
+                .from(borrow)
                 .where(
                         memberCodeEq(cond.getMemberCode()),
                         memberNameAndTelEq(cond.getMemberName(), cond.getMemberTel()))
-                .join(QBorrow.borrow.book, QBook.book)
-                .join(QBorrow.borrow.member, QMember.member)
+                .join(borrow.book, book)
+                .join(borrow.member, member)
                 .fetch();
     }
 
     private BooleanExpression bookNameEq(String bookName) {
         if (StringUtils.hasText(bookName)) {
-            return QBook.book.name.eq(bookName);
+            return book.name.eq(bookName);
         }
         return null;
     }
 
     private BooleanExpression bookCodeEq(String bookCode) {
         if (StringUtils.hasText(bookCode)) {
-            return QBook.book.code.eq(bookCode);
+            return book.code.eq(bookCode);
         }
         return null;
     }
 
     private BooleanExpression memberNameAndTelEq(String memberName, String memberTel) {
         if (StringUtils.hasText(memberName) && StringUtils.hasText(memberTel)) {
-            return QMember.member.username.eq(memberName).and(QMember.member.tel.eq(memberTel));
+            return member.username.eq(memberName).and(member.tel.eq(memberTel));
         }
         return null;
     }
 
     private BooleanExpression memberCodeEq(String memberCode) {
         if (StringUtils.hasText(memberCode)) {
-            return QMember.member.username.eq(memberCode);
+            return member.username.eq(memberCode);
         }
         return null;
     }

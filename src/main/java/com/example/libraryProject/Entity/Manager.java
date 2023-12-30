@@ -14,6 +14,7 @@ public class Manager {
 
     @Id @GeneratedValue
     private Long id;
+    private String managerName;
     private String password;
     private String role;
 }

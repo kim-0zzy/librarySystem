@@ -7,13 +7,17 @@ import com.example.libraryProject.Repository.MemberRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.libraryProject.Entity.QMember.member;
+
 @Repository
 @RequiredArgsConstructor
+@Primary
 public class DSLMemberRepository implements MemberRepository {
     private final EntityManager em;
     private final JPAQueryFactory jpaQueryFactory;
@@ -33,25 +37,28 @@ public class DSLMemberRepository implements MemberRepository {
     @Override
     public List<Member> findAll() throws NotFoundResultException {
         return jpaQueryFactory
-                .selectFrom(QMember.member)
+                .selectFrom(member)
                 .fetch();
 
     }
 
     @Override
-    public Member findByCode(String code) throws NotFoundResultException {
-        return jpaQueryFactory
-                .selectFrom(QMember.member)
-                .where(QMember.member.code.eq(code))
+    public Optional<Member> findByCode(String code) {
+        Member searchMember = jpaQueryFactory
+                .selectFrom(member)
+                .where(member.code.eq(code))
                 .fetchOne();
+        return Optional.ofNullable(searchMember);
     }
 
     @Override
-    public Member findByUsernameAndTel(String username, String tel) throws NotFoundResultException {
-        return jpaQueryFactory
-                .selectFrom(QMember.member)
-                .where(QMember.member.username.eq(username)
-                .and(QMember.member.tel.eq(tel)))
+    public Optional<Member> findByUsernameAndTel(String username, String tel){
+
+        Member searchMember = jpaQueryFactory
+                .selectFrom(member)
+                .where(member.username.eq(username)
+                .and(member.tel.eq(tel)))
                 .fetchOne();
+        return Optional.ofNullable(searchMember);
     }
 }
