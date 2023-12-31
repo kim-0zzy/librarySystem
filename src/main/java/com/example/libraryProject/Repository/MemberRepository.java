@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface MemberRepository {
     void save(Member member);
     Optional<Member> findById(Long id);
-    List<Member> findAll() throws NotFoundResultException;
+    List<Member> findAll();
     Optional<Member> findByCode(String code);
     Optional<Member> findByUsernameAndTel(String username, String tel);
 }

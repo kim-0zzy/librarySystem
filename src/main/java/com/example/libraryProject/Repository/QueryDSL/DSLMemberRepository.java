@@ -35,7 +35,7 @@ public class DSLMemberRepository implements MemberRepository {
     }
 
     @Override
-    public List<Member> findAll() throws NotFoundResultException {
+    public List<Member> findAll(){
         return jpaQueryFactory
                 .selectFrom(member)
                 .fetch();
