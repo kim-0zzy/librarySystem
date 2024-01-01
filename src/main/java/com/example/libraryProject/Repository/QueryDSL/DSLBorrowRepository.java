@@ -38,23 +38,32 @@ public class DSLBorrowRepository implements BorrowRepository {
     }
 
     @Override
-    public Optional<Borrow> findById(Long id) throws NotFoundResultException {
+    public Optional<Borrow> findById(Long id){
         Borrow borrow = em.find(Borrow.class, id);
         return Optional.ofNullable(borrow);
     }
 
     @Override
-    public List<Borrow> findAll() {
-        return jpaQueryFactory.selectFrom(borrow).fetch();
+    public List<ReturnBorrowDTO> findAll(){
+        return jpaQueryFactory
+                .select(Projections.constructor(ReturnBorrowDTO.class,
+                        borrow.id, borrow.borrowDate, borrow.limitDate,
+                        member.code, member.username,
+                        book.code, book.name, book.state)
+                )
+                .from(borrow)
+                .join(borrow.book, book)
+                .join(borrow.member, member)
+                .fetch();
     }
 
     @Override
-    public List<ReturnBorrowDTO> findBorrowByBookCondition(SearchCondition cond) throws NotFoundResultException {
+    public List<ReturnBorrowDTO> findBorrowByBookCondition(SearchCondition cond){
         return jpaQueryFactory
                 .select(Projections.constructor(ReturnBorrowDTO.class,
                                 borrow.id, borrow.borrowDate, borrow.limitDate,
                                 member.code, member.username,
-                                book.code, book.name, book.state        )
+                                book.code, book.name, book.state)
                         )
                 .from(borrow)
                 .where(
@@ -66,12 +75,12 @@ public class DSLBorrowRepository implements BorrowRepository {
     }
 
     @Override
-    public List<ReturnBorrowDTO> findBorrowByMemberCondition(SearchCondition cond) throws NotFoundResultException {
+    public List<ReturnBorrowDTO> findBorrowByMemberCondition(SearchCondition cond){
         return jpaQueryFactory
                 .select(Projections.constructor(ReturnBorrowDTO.class,
                         borrow.id, borrow.borrowDate, borrow.limitDate,
                         member.code, member.username,
-                        book.code, book.name, book.state        )
+                        book.code, book.name, book.state)
                 )
                 .from(borrow)
                 .where(

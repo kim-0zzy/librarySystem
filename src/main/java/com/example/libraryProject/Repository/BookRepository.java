@@ -9,9 +9,9 @@ import java.util.Optional;
 public interface BookRepository {
 
     void save(Book book);
-    Optional<Book> findById(Long id) throws Exception;
+    Optional<Book> findById(Long id);
     List<Book> findAll();
-    List<Book> findByBookName(String bookName) throws Exception;
-    List<Book> findByCode(String code) throws Exception;
+    List<Book> findByBookName(String bookName);
+    List<Book> findByCode(String code);
 
 }

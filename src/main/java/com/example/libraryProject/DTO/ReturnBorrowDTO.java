@@ -14,8 +14,8 @@ import java.util.UUID;
 public class ReturnBorrowDTO {
 
     private Long borrowId;
-    private LocalDate borrowData;
-    private LocalDate limitData;
+    private LocalDate borrowDate;
+    private LocalDate limitDate;
     private String memberCode;
     private String memberUsername;
     private String bookCode;

@@ -20,7 +20,7 @@ public class JPQLBookRepository implements BookRepository {
         em.persist(book);
     }
     @Override
-    public Optional<Book> findById(Long id) throws NotFoundResultException{
+    public Optional<Book> findById(Long id){
         Book book = em.find(Book.class, id);
         return Optional.ofNullable(book);
     }
@@ -30,7 +30,7 @@ public class JPQLBookRepository implements BookRepository {
                 .getResultList();
     }
     @Override
-    public List<Book> findByCode(String code) throws NotFoundResultException {
+    public List<Book> findByCode(String code){
         try{
             return em.createQuery("select b from Book b where b.code =: code"
                             , Book.class)
@@ -42,7 +42,7 @@ public class JPQLBookRepository implements BookRepository {
     }
 
     @Override
-    public List<Book> findByBookName(String name) throws NotFoundResultException{
+    public List<Book> findByBookName(String name){
         try{
             return em.createQuery("select b from Book b where b.name =: name"
             , Book.class)
@@ -53,7 +53,7 @@ public class JPQLBookRepository implements BookRepository {
         }
     }
 
-    public List<Book> findByBookNameWithoutBorrowed(String name) throws NotFoundResultException{
+    public List<Book> findByBookNameWithoutBorrowed(String name){
         try{
             return em.createQuery("select b from Book b where b.name =: name and b.state is true"
             , Book.class)

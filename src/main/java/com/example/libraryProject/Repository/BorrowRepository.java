@@ -11,10 +11,9 @@ import java.util.Optional;
 public interface BorrowRepository {
 
     void save(Borrow borrow);
-    Optional<Borrow> findById(Long id) throws NotFoundResultException;
-
-    List<Borrow> findAll();
-    List<ReturnBorrowDTO> findBorrowByBookCondition(SearchCondition cond) throws NotFoundResultException;
-    List<ReturnBorrowDTO> findBorrowByMemberCondition(SearchCondition cond) throws NotFoundResultException;
+    Optional<Borrow> findById(Long id);
+    List<ReturnBorrowDTO> findAll();
+    List<ReturnBorrowDTO> findBorrowByBookCondition(SearchCondition cond);
+    List<ReturnBorrowDTO> findBorrowByMemberCondition(SearchCondition cond);
 
 }

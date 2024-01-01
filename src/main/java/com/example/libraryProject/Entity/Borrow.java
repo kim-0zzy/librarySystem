@@ -25,11 +25,11 @@ public class Borrow {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    private void setMember(Member member){
+    public void setMember(Member member){
         this.member = member;
         member.getBorrow().add(this);
     }
-    private void setBook(Book book){
+    public void setBook(Book book){
         this.book = book;
         book.getBorrow().add(this);
     }
@@ -37,12 +37,5 @@ public class Borrow {
     public Borrow(int limitDays) {
         this.borrowDate = LocalDate.now();
         this.limitDate = LocalDate.now().plusDays(limitDays);
-    }
-
-    private Borrow createBorrow(Member member, Book book, int limitDays){
-        Borrow borrow = new Borrow(limitDays);
-        borrow.setMember(member);
-        borrow.setBook(book);
-        return borrow;
     }
 }

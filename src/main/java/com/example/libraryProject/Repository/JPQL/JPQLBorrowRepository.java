@@ -19,42 +19,67 @@ public class JPQLBorrowRepository implements BorrowRepository {
     private final EntityManager em;
 
     @Override
-    public void save(Borrow borrow){
-        em.persist(borrow);
+    public void save(Borrow borrow) {
+
     }
 
     @Override
-    public Optional<Borrow> findById(Long id){
-        Borrow borrow = em.find(Borrow.class, id);
-        return Optional.ofNullable(borrow);
+    public Optional<Borrow> findById(Long id) {
+        return Optional.empty();
     }
 
     @Override
-    public List<Borrow> findAll() {
-        return em.createQuery("select b from Borrow b").getResultList();
-    }
-
-    @Override
-    public List<ReturnBorrowDTO> findBorrowByBookCondition(SearchCondition cond) throws NotFoundResultException {
+    public List<ReturnBorrowDTO> findAll() {
         return null;
     }
 
     @Override
-    public List<ReturnBorrowDTO> findBorrowByMemberCondition(SearchCondition cond) throws NotFoundResultException {
-        try{
-//            b.id, b.borrowDate, b.limitDate, m.code, m.username, bk.code, bk.name, bk.state
-            return em.createQuery("select new com.example.libraryProject.DTO.ReturnBorrowDTO" +
-                            "(b.id, b.borrowDate, b.limitDate, m.code, m.username, bk.code, bk.name, bk.state)" +
-                            " from Borrow b" +
-                            " join b.member m" +
-                            " join b.book bk" +
-                            " where m.code =: code ", ReturnBorrowDTO.class)
-                    .setParameter("code", cond.getMemberCode())
-                    .getResultList();
-        }catch (Exception e){
-            return null;
-        }
+    public List<ReturnBorrowDTO> findBorrowByBookCondition(SearchCondition cond) {
+        return null;
     }
+
+    @Override
+    public List<ReturnBorrowDTO> findBorrowByMemberCondition(SearchCondition cond) {
+        return null;
+    }
+
+//    @Override
+//    public void save(Borrow borrow){
+//        em.persist(borrow);
+//    }
+//
+//    @Override
+//    public Optional<Borrow> findById(Long id){
+//        Borrow borrow = em.find(Borrow.class, id);
+//        return Optional.ofNullable(borrow);
+//    }
+//
+//    @Override
+//    public List<Borrow> findAll() {
+//        return em.createQuery("select b from Borrow b").getResultList();
+//    }
+//
+//    @Override
+//    public List<ReturnBorrowDTO> findBorrowByBookCondition(SearchCondition cond){
+//        return null;
+//    }
+//
+//    @Override
+//    public List<ReturnBorrowDTO> findBorrowByMemberCondition(SearchCondition cond){
+//        try{
+////            b.id, b.borrowDate, b.limitDate, m.code, m.username, bk.code, bk.name, bk.state
+//            return em.createQuery("select new com.example.libraryProject.DTO.ReturnBorrowDTO" +
+//                            "(b.id, b.borrowDate, b.limitDate, m.code, m.username, bk.code, bk.name, bk.state)" +
+//                            " from Borrow b" +
+//                            " join b.member m" +
+//                            " join b.book bk" +
+//                            " where m.code =: code ", ReturnBorrowDTO.class)
+//                    .setParameter("code", cond.getMemberCode())
+//                    .getResultList();
+//        }catch (Exception e){
+//            return null;
+//        }
+//    }
 //
 //    public List<ReturnBorrowDTO> findBorrowByMemberCode(String code) throws NotFoundResultException{
 //        // -> Condition 메서드로 옮긴 후 projection 적용 후 동적쿼리로 변환해야함. ↓↓↓↓↓↓

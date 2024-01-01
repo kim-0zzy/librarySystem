@@ -28,7 +28,7 @@ public class DSLBookRepository implements BookRepository {
     }
 
     @Override
-    public Optional<Book> findById(Long id) throws Exception {
+    public Optional<Book> findById(Long id){
         Book book = em.find(Book.class, id);
         return Optional.ofNullable(book);
     }
@@ -39,14 +39,14 @@ public class DSLBookRepository implements BookRepository {
                 .fetch();
     }
     @Override
-    public List<Book> findByBookName(String bookName) throws Exception {
+    public List<Book> findByBookName(String bookName){
         return jpaQueryFactory
                 .selectFrom(book)
                 .where(book.name.eq(bookName))
                 .fetch();
     }
     @Override
-    public List<Book> findByCode(String code) throws Exception {
+    public List<Book> findByCode(String code){
         return jpaQueryFactory
                 .selectFrom(book)
                 .where(book.code.eq(code))
