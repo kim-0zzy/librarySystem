@@ -84,7 +84,7 @@ class DSLMemberRepositoryTest {
         SearchCondition searchCondition = new SearchCondition(book.getName(), book.getCode(), null, null, null);
         ReturnBorrowDTO first = borrowService.findBorrowByCondition(searchCondition).stream().findFirst().get();
 
-        assertThat(saveBorrow.getBorrowDate()).isEqualTo(first.getBorrowData());
+        assertThat(saveBorrow.getBorrowDate()).isEqualTo(first.getBorrowDate());
 
 
 
