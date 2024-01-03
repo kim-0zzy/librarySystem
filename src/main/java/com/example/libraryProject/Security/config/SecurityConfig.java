@@ -56,7 +56,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/**")
                     .permitAll()
-                    .requestMatchers("/member/**").hasRole("MANAGER")
+//                    .requestMatchers("/member/**").hasRole("MANAGER")
                     .anyRequest().authenticated());
 
         httpSecurity.formLogin(formLogin -> formLogin.loginPage("/login")
