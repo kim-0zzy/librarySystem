@@ -3,10 +3,6 @@ package com.example.libraryProject.Repository.QueryDSL;
 import com.example.libraryProject.DTO.ReturnBorrowDTO;
 import com.example.libraryProject.DTO.SearchCondition;
 import com.example.libraryProject.Entity.Borrow;
-import com.example.libraryProject.Entity.QBook;
-import com.example.libraryProject.Entity.QBorrow;
-import com.example.libraryProject.Entity.QMember;
-import com.example.libraryProject.Exception.NotFoundResultException;
 import com.example.libraryProject.Repository.BorrowRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -89,6 +85,14 @@ public class DSLBorrowRepository implements BorrowRepository {
                 .join(borrow.book, book)
                 .join(borrow.member, member)
                 .fetch();
+    }
+
+    @Override
+    public void deleteByBookCode(String bookCode) {
+        jpaQueryFactory
+                .delete(borrow)
+                .where(borrow.book.code.eq(bookCode))
+                .execute();
     }
 
     private BooleanExpression bookNameEq(String bookName) {

@@ -43,6 +43,11 @@ public class JPQLBorrowRepository implements BorrowRepository {
         return null;
     }
 
+    @Override
+    public void deleteByBookCode(String bookCode) {
+
+    }
+
 //    @Override
 //    public void save(Borrow borrow){
 //        em.persist(borrow);

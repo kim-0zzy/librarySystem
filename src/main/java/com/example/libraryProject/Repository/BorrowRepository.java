@@ -15,5 +15,6 @@ public interface BorrowRepository {
     List<ReturnBorrowDTO> findAll();
     List<ReturnBorrowDTO> findBorrowByBookCondition(SearchCondition cond);
     List<ReturnBorrowDTO> findBorrowByMemberCondition(SearchCondition cond);
+    void deleteByBookCode(String bookCode);
 
 }

@@ -15,6 +15,6 @@ public interface BorrowService {
     BorrowDTO findBorrowById(Long id);
     List<ReturnBorrowDTO> findAllBorrows();
     List<ReturnBorrowDTO> findBorrowByCondition(SearchCondition cond);
-
-    Borrow createBorrow(Member member, Book book, Borrow borrow);
+    Borrow createBorrow(Member member, Book book, int limitDay);
+    void deleteBorrow(SearchCondition cond);
 }
