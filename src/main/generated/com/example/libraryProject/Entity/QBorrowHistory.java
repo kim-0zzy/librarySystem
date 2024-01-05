@@ -29,7 +29,7 @@ public class QBorrowHistory extends EntityPathBase<BorrowHistory> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final DatePath<java.time.LocalDate> returnedDate = createDate("returnedDate", java.time.LocalDate.class);
+    public final StringPath returnedDate = createString("returnedDate");
 
     public QBorrowHistory(String variable) {
         super(BorrowHistory.class, forVariable(variable));

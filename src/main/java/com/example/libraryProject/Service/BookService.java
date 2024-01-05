@@ -9,9 +9,9 @@ import java.util.Optional;
 public interface BookService {
 
     void join(Book book);
-    List<BookDTO> findAllBooks();
-    BookDTO findBookById(Long id);
-    List<BookDTO> findBookByTitle(String bookName);
-    List<BookDTO> findBookByCode(String bookCode);
+    List<Book> findAllBooks();
+    Book findBookById(Long id);
+    List<Book> findBookByTitle(String bookName);
+    List<Book> findBookByCode(String bookCode);
 
 }

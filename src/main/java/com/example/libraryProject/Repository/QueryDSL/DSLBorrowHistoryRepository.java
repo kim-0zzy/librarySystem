@@ -31,7 +31,7 @@ public class DSLBorrowHistoryRepository implements BorrowHistoryRepository {
         String selectedDate = year + "-" + month + "-01";
         LocalDate date = LocalDate.parse(selectedDate, DateTimeFormatter.ISO_DATE);
         jpaQueryFactory.delete(borrowHistory)
-                .where(borrowHistory.returnedDate.loe(date))
+                .where(borrowHistory.borrowedDate.loe(date))
                 .execute();
         // 파싱 사용해서 서브쿼리로 불러오기. <--- 고려해보기
     }
@@ -46,6 +46,7 @@ public class DSLBorrowHistoryRepository implements BorrowHistoryRepository {
     public List<BorrowHistory> findAllByMemberCode(String memberCode) {
         return jpaQueryFactory.selectFrom(borrowHistory)
                 .where(borrowHistory.borrowedMemberCode.eq(memberCode))
+                .orderBy(borrowHistory.borrowedDate.desc())
                 .fetch();
     }
 
@@ -53,6 +54,7 @@ public class DSLBorrowHistoryRepository implements BorrowHistoryRepository {
     public List<BorrowHistory> findAllByBookCode(String bookCode) {
         return jpaQueryFactory.selectFrom(borrowHistory)
                 .where(borrowHistory.borrowedBookCode.eq(bookCode))
+                .orderBy(borrowHistory.borrowedDate.desc())
                 .fetch();
     }
 
@@ -61,9 +63,9 @@ public class DSLBorrowHistoryRepository implements BorrowHistoryRepository {
         String selectedDate = year + "-" + month + "-" + day;
         LocalDate date = LocalDate.parse(selectedDate, DateTimeFormatter.ISO_DATE);
         return jpaQueryFactory.selectFrom(borrowHistory)
-                .where(borrowHistory.returnedDate.loe(date))
+                .where(borrowHistory.borrowedDate.loe(date))
+                .orderBy(borrowHistory.borrowedDate.desc())
                 .fetch();
-
         // 파싱 사용해서 서브쿼리로 불러오기. <-- 고려해보기
     }
 }

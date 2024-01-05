@@ -22,9 +22,9 @@ public class BorrowHistory {
     private String borrowedBookCode;
     private String borrowedBookName;
     private LocalDate borrowedDate;
-    private LocalDate returnedDate;
+    private String returnedDate;
 
-    public BorrowHistory(String borrowedMemberCode, String borrowedBookCode, String borrowedBookName, LocalDate borrowedDate, LocalDate returnedDate) {
+    public BorrowHistory(String borrowedMemberCode, String borrowedBookCode, String borrowedBookName, LocalDate borrowedDate, String returnedDate) {
         this.borrowedMemberCode = borrowedMemberCode;
         this.borrowedBookCode = borrowedBookCode;
         this.borrowedBookName = borrowedBookName;
@@ -32,4 +32,7 @@ public class BorrowHistory {
         this.returnedDate = returnedDate;
     }
 
+    public void setReturnedDate(String returnedDate) {
+        this.returnedDate = returnedDate;
+    }
 }

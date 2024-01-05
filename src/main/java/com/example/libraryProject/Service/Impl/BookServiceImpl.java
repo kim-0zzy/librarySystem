@@ -26,39 +26,24 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDTO> findAllBooks() {
-        List<Book> bookList = bookRepository.findAll();
-        List<BookDTO> bookDTOList = new ArrayList<>();
-        for (Book book : bookList) {
-            bookDTOList.add(buildBookDTO(book));
-        }
-        return bookDTOList;
+    public List<Book> findAllBooks() {
+        return bookRepository.findAll();
     }
 
     @Override
-    public BookDTO findBookById(Long id) {
+    public Book findBookById(Long id) {
         Optional<Book> book = bookRepository.findById(id);
-        return book.map(this::buildBookDTO).orElse(null);
+        return book.orElse(null);
     }
 
     @Override
-    public List<BookDTO> findBookByTitle(String bookName) {
-        List<BookDTO> bookDTOList = new ArrayList<>();
-        List<Book> bookList = bookRepository.findByBookName(bookName);
-        for (Book book : bookList) {
-            bookDTOList.add(buildBookDTO(book));
-        }
-        return bookDTOList;
+    public List<Book> findBookByTitle(String bookName) {
+        return bookRepository.findByBookName(bookName);
     }
 
     @Override
-    public List<BookDTO> findBookByCode(String bookCode) {
-        List<BookDTO> bookDTOList = new ArrayList<>();
-        List<Book> bookList = bookRepository.findByCode(bookCode);
-        for (Book book : bookList) {
-            bookDTOList.add(buildBookDTO(book));
-        }
-        return bookDTOList;
+    public List<Book> findBookByCode(String bookCode) {
+        return bookRepository.findByCode(bookCode);
     }
 
     private BookDTO buildBookDTO(Book book) {

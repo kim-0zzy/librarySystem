@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface BorrowService {
     void join(Borrow borrow);
-    BorrowDTO findBorrowById(Long id);
+    Borrow findBorrowById(Long id);
     List<ReturnBorrowDTO> findAllBorrows();
     List<ReturnBorrowDTO> findBorrowByCondition(SearchCondition cond);
     Borrow createBorrow(Member member, Book book, int limitDay);

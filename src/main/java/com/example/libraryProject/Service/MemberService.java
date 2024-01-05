@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface MemberService {
     void join(Member member) throws ExistMemberException;
-    List<MemberDTO> findAllMembers();
-    MemberDTO findMemberById(Long id);
-    MemberDTO findMemberByCode(String code);
-    MemberDTO findMemberByUsernameAndTel(String username, String Tel);
+    List<Member> findAllMembers();
+    Member findMemberById(Long id);
+    Member findMemberByCode(String code);
+    Member findMemberByUsernameAndTel(String username, String Tel);
 }

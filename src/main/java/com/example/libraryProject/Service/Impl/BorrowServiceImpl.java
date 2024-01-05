@@ -7,7 +7,6 @@ import com.example.libraryProject.Entity.Book;
 import com.example.libraryProject.Entity.Borrow;
 import com.example.libraryProject.Entity.BorrowHistory;
 import com.example.libraryProject.Entity.Member;
-import com.example.libraryProject.Repository.BookRepository;
 import com.example.libraryProject.Repository.BorrowHistoryRepository;
 import com.example.libraryProject.Repository.BorrowRepository;
 import com.example.libraryProject.Service.BorrowService;
@@ -31,12 +30,16 @@ public class BorrowServiceImpl implements BorrowService {
     @Override
     public void join(Borrow borrow) {
         borrowRepository.save(borrow);
+        BorrowHistory borrowHistory = new BorrowHistory(
+                borrow.getMember().getCode(), borrow.getBook().getCode(),
+                borrow.getBook().getName(), LocalDate.now(), "unReturned");
+        borrowHistoryRepository.save(borrowHistory);
     }
 
     @Override
-    public BorrowDTO findBorrowById(Long id) {
-        Optional<Borrow> borrow = borrowRepository.findById(id);
-        return borrow.map(this::buildBorrowDTO).orElse(null);
+    public Borrow findBorrowById(Long id) {
+        return borrowRepository.findById(id).orElse(null);
+//        return borrow.map(this::buildBorrowDTO).orElse(null);
     }
 
     @Override
@@ -68,11 +71,12 @@ public class BorrowServiceImpl implements BorrowService {
     public void deleteBorrow(SearchCondition cond) {
         Optional<ReturnBorrowDTO> returnBorrowDTO = borrowRepository.findBorrowByBookCondition(cond).stream().findFirst();
         returnBorrowDTO.ifPresent(dto -> {
-            BorrowHistory borrowHistory = new BorrowHistory(dto.getMemberCode(), dto.getBookCode(), dto.getBookName(), dto.getBorrowDate(), LocalDate.now());
-            borrowHistoryRepository.save(borrowHistory);
+            List<BorrowHistory> borrowHistoryList = borrowHistoryRepository.findAllByBookCode(dto.getBookCode());
+            borrowHistoryList.stream().findFirst().ifPresent(borrowHistory -> {
+               borrowHistory.setReturnedDate(LocalDate.now().toString());
+            });
         });
         borrowRepository.deleteByBookCode(cond.getBookCode());
-
     }
 
     private BorrowDTO buildBorrowDTO(Borrow borrow) {

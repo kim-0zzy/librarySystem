@@ -28,31 +28,24 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<MemberDTO> findAllMembers() {
-        List<Member> members = memberRepository.findAll();
-        List<MemberDTO> memberDTOList = new ArrayList<>();
-        for (Member member : members) {
-            memberDTOList.add(buildMember(member));
-        }
-        return memberDTOList;
+    public List<Member> findAllMembers() {
+        return memberRepository.findAll();
     }
 
     @Override
-    public MemberDTO findMemberById(Long id) {
-        Optional<Member> member = memberRepository.findById(id);
-        return member.map(this::buildMember).orElse(null);
+    public Member findMemberById(Long id) {
+        return memberRepository.findById(id).orElse(null);
     }
 
     @Override
-    public MemberDTO findMemberByCode(String code) {
-        Optional<Member> member = memberRepository.findByCode(code);
-        return member.map(this::buildMember).orElse(null);
+    public Member findMemberByCode(String code) {
+        return memberRepository.findByCode(code).orElse(null);
+
     }
 
     @Override
-    public MemberDTO findMemberByUsernameAndTel(String username, String tel) {
-        Optional<Member> member = memberRepository.findByUsernameAndTel(username, tel);
-        return member.map(this::buildMember).orElse(null);
+    public Member findMemberByUsernameAndTel(String username, String tel) {
+        return memberRepository.findByUsernameAndTel(username, tel).orElse(null);
     }
 
     private boolean validToNotDuplicatedMember(Member member) {
