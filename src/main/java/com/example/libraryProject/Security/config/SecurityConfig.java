@@ -59,12 +59,16 @@ public class SecurityConfig {
 //                    .requestMatchers("/member/**").hasRole("MANAGER")
                     .anyRequest().authenticated());
 
-        httpSecurity.formLogin(formLogin -> formLogin.loginPage("/login")
-                .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/main")
-                .successHandler(successHandler())
-                .failureHandler(failureHandler()))
-                .logout(logout -> logout.logoutSuccessHandler(logoutSuccessHandler()));
+        httpSecurity.formLogin(formLogin -> formLogin
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/main")
+                        .successHandler(successHandler())
+                        .failureHandler(failureHandler()))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID"));
 
 
         return httpSecurity.build();
