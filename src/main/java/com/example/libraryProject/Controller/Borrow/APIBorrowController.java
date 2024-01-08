@@ -1,9 +1,9 @@
-package com.example.libraryProject.Controller.RestController;
+package com.example.libraryProject.Controller.Borrow;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class APIManagerController {
+public class APIBorrowController {
 }

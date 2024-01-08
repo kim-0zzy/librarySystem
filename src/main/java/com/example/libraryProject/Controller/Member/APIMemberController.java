@@ -1,4 +1,4 @@
-package com.example.libraryProject.Controller.RestController;
+package com.example.libraryProject.Controller.Member;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
