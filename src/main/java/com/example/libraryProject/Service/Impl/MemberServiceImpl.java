@@ -20,10 +20,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     @Override
-    public void join(Member member) throws ExistMemberException{
-        if (validToNotDuplicatedMember(member)) {
-            throw new ExistMemberException("이미 존재하는 회원입니다.");
-        }
+    public void join(Member member){
         memberRepository.save(member);
     }
 
@@ -48,8 +45,9 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findByUsernameAndTel(username, tel).orElse(null);
     }
 
-    private boolean validToNotDuplicatedMember(Member member) {
-        return memberRepository.findByUsernameAndTel(member.getUsername(), member.getTel()).isPresent();
+    @Override
+    public Boolean validToNotDuplicatedMember(String username, String tel) {
+        return memberRepository.findByUsernameAndTel(username, tel).isPresent();
     }
 
     private MemberDTO buildMember(Member targetMember) {

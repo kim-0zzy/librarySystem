@@ -24,7 +24,6 @@ public class Member {
     private String tel;
     private String code;
 
-
     public Member(String username, String password, String tel, Address address, String code) {
         this.username = username;
         this.password = password;

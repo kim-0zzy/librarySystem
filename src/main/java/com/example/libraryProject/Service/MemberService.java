@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberService {
-    void join(Member member) throws ExistMemberException;
+    void join(Member member);
     List<Member> findAllMembers();
     Member findMemberById(Long id);
     Member findMemberByCode(String code);
-    Member findMemberByUsernameAndTel(String username, String Tel);
+    Member findMemberByUsernameAndTel(String username, String tel);
+    Boolean validToNotDuplicatedMember(String username, String tel);
 }
