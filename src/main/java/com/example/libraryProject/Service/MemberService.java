@@ -14,4 +14,5 @@ public interface MemberService {
     Member findMemberByCode(String code);
     Member findMemberByUsernameAndTel(String username, String tel);
     Boolean validToNotDuplicatedMember(String username, String tel);
+    MemberDTO buildMember(Member targetMember);
 }

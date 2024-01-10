@@ -2,16 +2,13 @@ package com.example.libraryProject.Service.Impl;
 
 import com.example.libraryProject.DTO.MemberDTO;
 import com.example.libraryProject.Entity.Member;
-import com.example.libraryProject.Exception.ExistMemberException;
 import com.example.libraryProject.Repository.MemberRepository;
 import com.example.libraryProject.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +47,8 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findByUsernameAndTel(username, tel).isPresent();
     }
 
-    private MemberDTO buildMember(Member targetMember) {
+    @Override
+    public MemberDTO buildMember(Member targetMember) {
         return MemberDTO.builder()
                 .username(targetMember.getUsername())
                 .tel(targetMember.getTel())
