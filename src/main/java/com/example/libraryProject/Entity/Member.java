@@ -32,6 +32,14 @@ public class Member {
         this.code = code;
     }
 
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private List<Borrow> borrow = new ArrayList<>();
 }

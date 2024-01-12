@@ -14,4 +14,9 @@ public class MessageResponseDTO {
         this.statusCode = statusCode;
         this.object = object;
     }
+
+    public MessageResponseDTO(String message, int statusCode) {
+        this.message = message;
+        this.statusCode = statusCode;
+    }
 }

@@ -2,6 +2,7 @@ package com.example.libraryProject.Controller.Member;
 
 import com.example.libraryProject.Controller.Member.Form.ResponseMemberForm;
 import com.example.libraryProject.Controller.Member.Form.SignUpMemberForm;
+import com.example.libraryProject.Controller.Member.Form.UpdateMemberForm;
 import com.example.libraryProject.DTO.MemberDTO;
 import com.example.libraryProject.DTO.MessageResponseDTO;
 import com.example.libraryProject.DTO.SearchCondition;
@@ -10,6 +11,7 @@ import com.example.libraryProject.Entity.Member;
 import com.example.libraryProject.Exception.ExistMemberException;
 import com.example.libraryProject.Exception.NotExsistConditionException;
 import com.example.libraryProject.Service.MemberService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.beans.NullValueInNestedPathException;
@@ -18,6 +20,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +38,12 @@ public class APIMemberController {
 
     private final MemberService memberService;
 
+    private Long loadLoginMember() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member member = (Member) authentication.getPrincipal();
+        return member.getId();
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<MessageResponseDTO> signUp(@RequestBody SignUpMemberForm signUpMemberForm) throws ExistMemberException {
         if (memberService.validToNotDuplicatedMember(signUpMemberForm.getUsername(), signUpMemberForm.getTel())) {
@@ -47,7 +57,7 @@ public class APIMemberController {
 
         memberService.join(member);
 
-        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Success", HttpStatus.OK.value(),
+        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Success", HttpStatus.CREATED.value(),
                 new ResponseMemberForm(signUpMemberForm.getUsername(), memberCode));
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -58,7 +68,7 @@ public class APIMemberController {
     }
 
     @GetMapping("/members")
-    public ResponseEntity<MessageResponseDTO> getAllMember() {
+    public ResponseEntity<MessageResponseDTO> AllMember() {
 
         MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Success", HttpStatus.OK.value(),
                 memberService.findAllMembers());
@@ -68,10 +78,10 @@ public class APIMemberController {
         return new ResponseEntity<>(messageResponseDTO, httpHeaders, HttpStatus.OK);
     }
 
-    @GetMapping("/members/")
-    public ResponseEntity<MessageResponseDTO> getMemberByCond(@RequestBody SearchCondition searchCondition) throws NotExsistConditionException {
+    @GetMapping("/members/search")
+    public ResponseEntity<MessageResponseDTO> searchMember(@RequestBody SearchCondition searchCondition) throws NotExsistConditionException {
         if (!(StringUtils.hasText(searchCondition.getMemberCode()) ||
-                (StringUtils.hasText(searchCondition.getMemberName()) && StringUtils.hasText(searchCondition.getMemberTel())))){
+                (StringUtils.hasText(searchCondition.getMemberName()) && StringUtils.hasText(searchCondition.getMemberTel())))) {
             throw new NotExsistConditionException("Not Exist In Search Condition ");
         }
 
@@ -90,6 +100,20 @@ public class APIMemberController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
+        return new ResponseEntity<>(messageResponseDTO, httpHeaders, HttpStatus.OK);
+    }
+
+    @Transactional
+    @PostMapping("/members/update")
+    public ResponseEntity<MessageResponseDTO> updateMember(@RequestBody UpdateMemberForm updateMemberForm) {
+        Member member = memberService.findMemberById(loadLoginMember());
+        String updateHistory = memberService.updateMember(member, updateMemberForm);
+
+        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Success", HttpStatus.OK.value(),
+                updateHistory);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         return new ResponseEntity<>(messageResponseDTO, httpHeaders, HttpStatus.OK);
     }
 }

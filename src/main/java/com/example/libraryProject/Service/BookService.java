@@ -12,6 +12,7 @@ public interface BookService {
     List<Book> findAllBooks();
     Book findBookById(Long id);
     List<Book> findBookByTitle(String bookName);
-    List<Book> findBookByCode(String bookCode);
+    Book findBookByCode(String bookCode);
+    BookDTO buildBookDTO(Book book);
 
 }

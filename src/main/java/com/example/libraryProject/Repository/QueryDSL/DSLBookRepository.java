@@ -46,10 +46,10 @@ public class DSLBookRepository implements BookRepository {
                 .fetch();
     }
     @Override
-    public List<Book> findByCode(String code){
+    public Book findByCode(String code){
         return jpaQueryFactory
                 .selectFrom(book)
                 .where(book.code.eq(code))
-                .fetch();
+                .fetchOne();
     }
 }

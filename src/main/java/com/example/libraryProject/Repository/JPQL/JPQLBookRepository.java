@@ -30,12 +30,12 @@ public class JPQLBookRepository implements BookRepository {
                 .getResultList();
     }
     @Override
-    public List<Book> findByCode(String code){
+    public Book findByCode(String code){
         try{
             return em.createQuery("select b from Book b where b.code =: code"
                             , Book.class)
                     .setParameter("code", code)
-                    .getResultList();
+                    .getSingleResult();
         }catch (Exception e){
             return null;
         }

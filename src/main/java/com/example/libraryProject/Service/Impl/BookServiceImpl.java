@@ -42,11 +42,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findBookByCode(String bookCode) {
+    public Book findBookByCode(String bookCode) {
         return bookRepository.findByCode(bookCode);
     }
 
-    private BookDTO buildBookDTO(Book book) {
+    @Override
+    public BookDTO buildBookDTO(Book book) {
         return BookDTO.builder()
                 .name(book.getName())
                 .code(book.getCode())
