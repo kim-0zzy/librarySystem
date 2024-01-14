@@ -33,7 +33,7 @@ public class Book {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
     private List<Borrow> borrow = new ArrayList<>();
 
-    public void setState(){
+    public void toggleState(){
         this.state = !this.state;
     }
 }

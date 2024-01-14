@@ -30,6 +30,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,8 +58,8 @@ public class APIMemberController {
 
         memberService.join(member);
 
-        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Success", HttpStatus.CREATED.value(),
-                new ResponseMemberForm(signUpMemberForm.getUsername(), memberCode));
+        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Register Success", HttpStatus.CREATED.value(),
+                new ResponseMemberForm(signUpMemberForm.getUsername(), signUpMemberForm.getTel() ,memberCode));
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
@@ -69,9 +70,12 @@ public class APIMemberController {
 
     @GetMapping("/members")
     public ResponseEntity<MessageResponseDTO> AllMember() {
+        List<MemberDTO> allMembers = memberService.findAllMembers()
+                .stream()
+                .map(memberService::buildMember)
+                .collect(Collectors.toList());
 
-        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Success", HttpStatus.OK.value(),
-                memberService.findAllMembers());
+        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Search Success", HttpStatus.OK.value(), allMembers);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
@@ -94,7 +98,7 @@ public class APIMemberController {
             member = memberService.findMemberByUsernameAndTel(searchCondition.getMemberName(), searchCondition.getMemberTel());
         }
 
-        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Success", HttpStatus.OK.value(),
+        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Search Success", HttpStatus.OK.value(),
                 memberService.buildMember(member));
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -109,7 +113,7 @@ public class APIMemberController {
         Member member = memberService.findMemberById(loadLoginMember());
         String updateHistory = memberService.updateMember(member, updateMemberForm);
 
-        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Success", HttpStatus.OK.value(),
+        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Update Success", HttpStatus.OK.value(),
                 updateHistory);
 
         HttpHeaders httpHeaders = new HttpHeaders();

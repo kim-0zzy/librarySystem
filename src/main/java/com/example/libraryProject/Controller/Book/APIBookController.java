@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,7 @@ public class APIBookController {
         Book book = new Book(registerBookForm.getName(), bookCode, registerBookForm.getPlace(), registerBookForm.getPrice());
         bookService.join(book);
 
-        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Success", HttpStatus.CREATED.value(),
+        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Register Success", HttpStatus.CREATED.value(),
                 bookService.buildBookDTO(book));
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -51,7 +52,7 @@ public class APIBookController {
 
     @GetMapping("/books")
     public ResponseEntity<MessageResponseDTO> AllBook() {
-        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Success", HttpStatus.OK.value(),
+        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Search Success", HttpStatus.OK.value(),
                 bookService.findAllBooks());
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -60,13 +61,13 @@ public class APIBookController {
         return new ResponseEntity<>(messageResponseDTO, httpHeaders, HttpStatus.OK);
     }
 
-    @GetMapping("/members/search")
+    @GetMapping("/books/search")
     public ResponseEntity<MessageResponseDTO> searchBook(@RequestBody SearchCondition searchCondition) throws NotExsistConditionException {
-        if (!(StringUtils.hasText( searchCondition.getBookCode()) || (StringUtils.hasText(searchCondition.getBookName())) )) {
+        if (!(StringUtils.hasText(searchCondition.getBookCode()) || (StringUtils.hasText(searchCondition.getBookName())))) {
             throw new NotExsistConditionException("Not Exist In Search Condition");
         }
 
-        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Success", HttpStatus.OK.value());
+        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Search Success", HttpStatus.OK.value());
 
         if (StringUtils.hasText(searchCondition.getBookName())) {
             List<BookDTO> bookDTOList = bookService.findBookByTitle(searchCondition.getBookName())
@@ -80,6 +81,24 @@ public class APIBookController {
             messageResponseDTO.setObject(bookDTO);
         }
 
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+
+        return new ResponseEntity<>(messageResponseDTO, httpHeaders, HttpStatus.OK);
+    }
+
+    @Transactional
+    @PostMapping("/books/stateChange")
+    public ResponseEntity<MessageResponseDTO> stateChange(@RequestBody SearchCondition searchCondition) throws NotExsistConditionException {
+        if (!(StringUtils.hasText(searchCondition.getBookCode()))) {
+            throw new NotExsistConditionException("Not Exist In Search Condition");
+        }
+
+        Book book = bookService.findBookByCode(searchCondition.getBookCode());
+        book.toggleState();
+        BookDTO bookDTO = bookService.buildBookDTO(book);
+
+        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Update Success", HttpStatus.OK.value(), bookDTO);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 

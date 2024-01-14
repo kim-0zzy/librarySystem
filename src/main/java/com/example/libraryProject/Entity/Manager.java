@@ -15,6 +15,14 @@ public class Manager {
     @Id @GeneratedValue
     private Long id;
     private String managerName;
+    private String realName;
     private String password;
     private String role;
+
+    public Manager(String managerName, String realName, String password) {
+        this.managerName = managerName;
+        this.realName = realName;
+        this.password = password;
+        this.role = "ROLE_MANAGER";
+    }
 }
