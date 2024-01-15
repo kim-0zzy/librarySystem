@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <title>Login page</title>
+        <link href="/css/style.css" rel="stylesheet">
+        <style>
+        h1 {text-align: center;}
+        h2 {text-align: center; font-size: 50px;}
+        body {text-align: center;
+            background: #1c4960;
+        }
+        input {color:rgb(15, 42, 58);
+            font-family: "BMJUA";
+            border: 2px solid #0000007e;
+        }
+        button {
+            font-family: "BMJUA";
+            border: 2px solid #0000007e;
+        }
+        
+        </style>
+    </head><br><br><br>
+    <h1>HEalthy Long PERsist</h1>
+        <h2> HELPER </h2>
+        <br>
+
+    <body style="color:rgb(3, 21, 32)"><br><br><br>
+
+        <p>아이디와 비밀번호를 입력해주세요.</p><br>
+
+
+    <div th:if="${param.error}" class="form-group">
+        <span th:text="${exception}" class="alert alert-danger">잘못된 아이디나 암호입니다</span>
+    </div>
+
+        <form th:action="@{/loginproc}" class="form-signin" method="post">
+            <input type="hidden" th:value="secret" name="secret_key" />
+            <div class="form-group">&nbsp;
+               ID : <input type="text" class="form-control" name="username" required="required" autofocus="autofocus" style="font-size: 20px; background: #477176">
+            </div>
+            <br><br>
+            <div class="form-group">
+               PW : <input type="password" class="form-control" name="password" required="required" style="font-size: 20px; color: #030d12; background: #477176">
+            </div>
+            <br><br>
+            <button type="submit" class="btn btn-lg btn-primary btn-block"  style= "font-size: 20px; background: #477176">로그인</button>
+        </form>
+
+    </body>
+</html>

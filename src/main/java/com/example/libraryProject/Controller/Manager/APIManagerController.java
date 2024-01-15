@@ -64,31 +64,34 @@ public class APIManagerController {
         ManagerDTO managerDTO = managerService.buildManager(manager);
 
 
-        return new ResponseEntity<>(new MessageResponseDTO("Register Success", HttpStatus.BAD_REQUEST.value(), managerDTO), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponseDTO("Register Success", HttpStatus.OK.value(), managerDTO), httpHeaders, HttpStatus.OK);
     }
 
-    @PostMapping("/login-proc") // 잘 생각해보기 !!
-    public ResponseEntity<MessageResponseDTO> loginManager(@RequestBody LoginManagerForm loginManagerForm) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+//    @PostMapping("/login-proc") // 잘 생각해보기 !!
+//    public ResponseEntity<MessageResponseDTO> loginManager(@RequestBody LoginManagerForm loginManagerForm) {
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+//
+//        try {
+//
+//            Authentication authentication = new UsernamePasswordAuthenticationToken(loginManagerForm.getManagerName(), passwordEncoder.encode(loginManagerForm.getPassword()));
+//
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//            Authentication findAuthentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//            Manager manager = (Manager) findAuthentication.getPrincipal();
+//
+//
+//            return new ResponseEntity<>(
+//                    new MessageResponseDTO(
+//                            "Login Success", HttpStatus.OK.value(), new ResponseManagerForm(manager.getRealName(), manager.getRole())),
+//                    httpHeaders, HttpStatus.OK);
+//        } catch (AuthenticationException e) {
+//            return new ResponseEntity<>(new MessageResponseDTO("Login Failure", HttpStatus.BAD_REQUEST.value()), httpHeaders, HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
-        try {
-
-            Authentication authentication = new UsernamePasswordAuthenticationToken(loginManagerForm.getManagerName(), passwordEncoder.encode(loginManagerForm.getPassword()));
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            Manager manager = (Manager) authentication.getPrincipal();
-
-
-            return new ResponseEntity<>(
-                    new MessageResponseDTO(
-                            "Login Success", HttpStatus.OK.value(), new ResponseManagerForm(manager.getRealName(), manager.getRole())),
-                    httpHeaders, HttpStatus.OK);
-        } catch (AuthenticationException e) {
-            return new ResponseEntity<>(new MessageResponseDTO("Login Failure", HttpStatus.BAD_REQUEST.value()), httpHeaders, HttpStatus.BAD_REQUEST);
-        }
-    }
     @GetMapping("/logout")
     public ResponseEntity<MessageResponseDTO> logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -102,6 +105,16 @@ public class APIManagerController {
         httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         return new ResponseEntity<>(new MessageResponseDTO("Logout Success", HttpStatus.OK.value(), new redirectURLInfo("/")), httpHeaders, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/apiManager/findOne")
+    public ResponseEntity<MessageResponseDTO> findOneManager(@RequestParam String managerName) {
+
+        ManagerDTO managerDTO = managerService.buildManager(managerService.findManagerByName(managerName));
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        return new ResponseEntity<>(new MessageResponseDTO("find Success", HttpStatus.OK.value(), managerDTO), httpHeaders, HttpStatus.OK);
     }
 
     static class redirectURLInfo{

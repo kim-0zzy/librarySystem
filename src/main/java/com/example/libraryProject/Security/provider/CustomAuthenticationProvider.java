@@ -8,6 +8,7 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -22,7 +23,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String managerName = authentication.getName();
         String password = (String) authentication.getCredentials();
-        ManagerContext managerContext = (ManagerContext) userDetailsService.loadUserByUsername(managerName);
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(managerName);
+        ManagerContext managerContext = new ManagerContext(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
 
         if (!matchPassword(password, managerContext.getPassword())) {
             throw new BadCredentialsException(managerName + "'s password is not matched !");

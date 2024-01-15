@@ -23,6 +23,6 @@ public class Manager {
         this.managerName = managerName;
         this.realName = realName;
         this.password = password;
-        this.role = "ROLE_MANAGER";
+        this.role = "MANAGER";
     }
 }

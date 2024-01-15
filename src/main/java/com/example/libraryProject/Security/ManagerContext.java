@@ -15,4 +15,8 @@ public class ManagerContext extends User {
     public ManagerContext(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
     }
+//    public ManagerContext(Manager manager, Collection<? extends GrantedAuthority> authorities) {
+//        super(manager.getManagerName(), manager.getPassword(), authorities);
+//        this.manager = manager;
+//    }
 }

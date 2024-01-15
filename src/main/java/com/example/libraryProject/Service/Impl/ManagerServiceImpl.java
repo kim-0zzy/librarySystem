@@ -43,6 +43,7 @@ public class ManagerServiceImpl implements ManagerService{
     public ManagerDTO buildManager(Manager targetManager) {
         return ManagerDTO.builder()
                 .managerName(targetManager.getManagerName())
+                .realName(targetManager.getRealName())
                 .role(targetManager.getRole())
                 .build();
     }

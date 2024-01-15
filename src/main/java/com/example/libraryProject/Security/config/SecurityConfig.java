@@ -24,6 +24,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.firewall.DefaultHttpFirewall;
+import org.springframework.security.web.firewall.HttpFirewall;
 
 @Configuration
 @EnableWebSecurity
@@ -52,6 +54,10 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer(){
         return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
+    @Bean
+    public HttpFirewall defaultHttpFirewall() {
+        return new DefaultHttpFirewall();
+    }
 
 //    @Bean
 //    public AuthenticationManager authenticationManager(HttpSecurity httpSecurity, PasswordEncoder passwordEncoder, UserDetailsService userDetailsService)throws Exception{
@@ -75,7 +81,7 @@ public class SecurityConfig {
 
         httpSecurity.formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .loginProcessingUrl("/login-proc")
+                        .loginProcessingUrl("/loginproc")
                         .defaultSuccessUrl("/main")
                         .successHandler(successHandler())
                         .failureHandler(failureHandler()))
