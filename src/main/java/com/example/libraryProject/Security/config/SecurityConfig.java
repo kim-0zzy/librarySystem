@@ -53,6 +53,8 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+//                .requestMatchers("/resources/**", "/static/**", "/static/css")
+
     }
     @Bean
     public HttpFirewall defaultHttpFirewall() {
@@ -81,7 +83,7 @@ public class SecurityConfig {
 
         httpSecurity.formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .loginProcessingUrl("/loginproc")
+                        .loginProcessingUrl("/loginProc")
                         .defaultSuccessUrl("/main")
                         .successHandler(successHandler())
                         .failureHandler(failureHandler()))

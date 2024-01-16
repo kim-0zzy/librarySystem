@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Manager manager = managerRepository.findByName(username).orElseThrow(() -> new UsernameNotFoundException("UserName Is NotFound"));
         return ManagerContext.builder()
                 .username(manager.getManagerName())
-                .password(passwordEncoder.encode(manager.getPassword()))
+                .password(manager.getPassword())
                 .roles(manager.getRole())
                 .build();
 

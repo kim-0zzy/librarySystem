@@ -33,7 +33,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (!managerContext.isEnabled()) {
             throw new LockedException(managerName + "'s Account is Locked !");
         }
-
         return new UsernamePasswordAuthenticationToken(managerName, password, managerContext.getAuthorities());
     }
 

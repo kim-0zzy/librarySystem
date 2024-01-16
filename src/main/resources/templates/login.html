@@ -34,7 +34,7 @@
         <span th:text="${exception}" class="alert alert-danger">잘못된 아이디나 암호입니다</span>
     </div>
 
-        <form th:action="@{/loginproc}" class="form-signin" method="post">
+        <form th:action="@{/loginProc}" class="form-signin" method="post">
             <input type="hidden" th:value="secret" name="secret_key" />
             <div class="form-group">&nbsp;
                ID : <input type="text" class="form-control" name="username" required="required" autofocus="autofocus" style="font-size: 20px; background: #477176">
