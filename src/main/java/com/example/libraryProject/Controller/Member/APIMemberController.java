@@ -1,5 +1,6 @@
 package com.example.libraryProject.Controller.Member;
 
+import com.example.libraryProject.Config.MemberAndBookHolder;
 import com.example.libraryProject.Controller.Member.Form.ResponseMemberForm;
 import com.example.libraryProject.Controller.Member.Form.SignUpMemberForm;
 import com.example.libraryProject.Controller.Member.Form.UpdateMemberForm;
@@ -39,6 +40,9 @@ public class APIMemberController {
 
     private final MemberService memberService;
 
+    @Autowired
+    private MemberAndBookHolder memberAndBookHolder;
+
     private Long loadLoginMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Member member = (Member) authentication.getPrincipal();
@@ -68,7 +72,22 @@ public class APIMemberController {
         return new ResponseEntity<>(messageResponseDTO, httpHeaders, HttpStatus.OK);
     }
 
-    @GetMapping("/members")
+
+    @Transactional
+    @PostMapping("/members/update")
+    public ResponseEntity<MessageResponseDTO> updateMember(@RequestBody UpdateMemberForm updateMemberForm) {
+        Member member = memberService.findMemberById(loadLoginMember());
+        String updateHistory = memberService.updateMember(member, updateMemberForm);
+
+        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Update Success", HttpStatus.OK.value(),
+                updateHistory);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        return new ResponseEntity<>(messageResponseDTO, httpHeaders, HttpStatus.OK);
+    }
+
+    @GetMapping("/members/allMembers")
     public ResponseEntity<MessageResponseDTO> AllMember() {
         List<MemberDTO> allMembers = memberService.findAllMembers()
                 .stream()
@@ -82,7 +101,7 @@ public class APIMemberController {
         return new ResponseEntity<>(messageResponseDTO, httpHeaders, HttpStatus.OK);
     }
 
-    @GetMapping("/members/search")
+    @GetMapping("/members/searchOne")
     public ResponseEntity<MessageResponseDTO> searchMember(@RequestBody SearchCondition searchCondition) throws NotExsistConditionException {
         if (!(StringUtils.hasText(searchCondition.getMemberCode()) ||
                 (StringUtils.hasText(searchCondition.getMemberName()) && StringUtils.hasText(searchCondition.getMemberTel())))) {
@@ -104,20 +123,10 @@ public class APIMemberController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
-        return new ResponseEntity<>(messageResponseDTO, httpHeaders, HttpStatus.OK);
-    }
-
-    @Transactional
-    @PostMapping("/members/update")
-    public ResponseEntity<MessageResponseDTO> updateMember(@RequestBody UpdateMemberForm updateMemberForm) {
-        Member member = memberService.findMemberById(loadLoginMember());
-        String updateHistory = memberService.updateMember(member, updateMemberForm);
-
-        MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Update Success", HttpStatus.OK.value(),
-                updateHistory);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        if (memberAndBookHolder.getQueriedMember().size() > 0) {
+            memberAndBookHolder.getQueriedMember().clear();
+            memberAndBookHolder.getQueriedMember().put("selectedMember", member);
+        }
         return new ResponseEntity<>(messageResponseDTO, httpHeaders, HttpStatus.OK);
     }
 }

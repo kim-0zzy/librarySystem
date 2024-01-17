@@ -1,5 +1,6 @@
 package com.example.libraryProject.Controller.Book;
 
+import com.example.libraryProject.Config.MemberAndBookHolder;
 import com.example.libraryProject.Controller.Book.Form.RegisterBookForm;
 import com.example.libraryProject.Controller.Member.Form.ResponseMemberForm;
 import com.example.libraryProject.Controller.Member.Form.SignUpMemberForm;
@@ -13,6 +14,7 @@ import com.example.libraryProject.Exception.ExistMemberException;
 import com.example.libraryProject.Exception.NotExsistConditionException;
 import com.example.libraryProject.Service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,6 +35,8 @@ import java.util.stream.Collectors;
 public class APIBookController {
 
     private final BookService bookService;
+    @Autowired
+    private MemberAndBookHolder memberAndBookHolder;
 
     @PostMapping("/register")
     public ResponseEntity<MessageResponseDTO> registerBook(@RequestBody RegisterBookForm registerBookForm) {
@@ -50,7 +54,7 @@ public class APIBookController {
         return new ResponseEntity<>(messageResponseDTO, httpHeaders, HttpStatus.OK);
     }
 
-    @GetMapping("/books")
+    @GetMapping("/books/allBooks")
     public ResponseEntity<MessageResponseDTO> AllBook() {
         MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Search Success", HttpStatus.OK.value(),
                 bookService.findAllBooks());
@@ -61,7 +65,7 @@ public class APIBookController {
         return new ResponseEntity<>(messageResponseDTO, httpHeaders, HttpStatus.OK);
     }
 
-    @GetMapping("/books/search")
+    @GetMapping("/books/searchOne")
     public ResponseEntity<MessageResponseDTO> searchBook(@RequestBody SearchCondition searchCondition) throws NotExsistConditionException {
         if (!(StringUtils.hasText(searchCondition.getBookCode()) || (StringUtils.hasText(searchCondition.getBookName())))) {
             throw new NotExsistConditionException("Not Exist In Search Condition");
@@ -80,6 +84,10 @@ public class APIBookController {
             BookDTO bookDTO = bookService.buildBookDTO(bookService.findBookByCode(searchCondition.getBookCode()));
             messageResponseDTO.setObject(bookDTO);
         }
+//        if (memberAndBookHolder.getQueriedMember().size() > 0) {
+//
+//            memberAndBookHolder.getQueriedMember().put("selectedMember", b);
+//        }
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
