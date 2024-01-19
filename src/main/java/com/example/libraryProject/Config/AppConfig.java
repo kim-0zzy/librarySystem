@@ -14,4 +14,9 @@ public class AppConfig {
     JPAQueryFactory jpaQueryFactory(EntityManager em) {
         return new JPAQueryFactory(em);
     }
+
+    @Bean
+    MemberAndBookHolder memberAndBookHolder() {
+        return new MemberAndBookHolder();
+    }
 }

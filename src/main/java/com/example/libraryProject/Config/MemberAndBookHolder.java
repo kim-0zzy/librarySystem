@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MemberAndBookHolder {
 
     private ConcurrentHashMap<String, Member> queriedMember = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<String, Book> queriedBook = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String , Book> queriedBook = new ConcurrentHashMap<>();
 
     public ConcurrentHashMap<String, Member> getQueriedMember() {
         return queriedMember;

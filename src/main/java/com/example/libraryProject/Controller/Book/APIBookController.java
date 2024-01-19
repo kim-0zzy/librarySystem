@@ -2,19 +2,13 @@ package com.example.libraryProject.Controller.Book;
 
 import com.example.libraryProject.Config.MemberAndBookHolder;
 import com.example.libraryProject.Controller.Book.Form.RegisterBookForm;
-import com.example.libraryProject.Controller.Member.Form.ResponseMemberForm;
-import com.example.libraryProject.Controller.Member.Form.SignUpMemberForm;
 import com.example.libraryProject.DTO.BookDTO;
 import com.example.libraryProject.DTO.MessageResponseDTO;
 import com.example.libraryProject.DTO.SearchCondition;
-import com.example.libraryProject.Entity.Address;
 import com.example.libraryProject.Entity.Book;
-import com.example.libraryProject.Entity.Member;
-import com.example.libraryProject.Exception.ExistMemberException;
 import com.example.libraryProject.Exception.NotExsistConditionException;
 import com.example.libraryProject.Service.BookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,7 +18,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -35,8 +28,7 @@ import java.util.stream.Collectors;
 public class APIBookController {
 
     private final BookService bookService;
-    @Autowired
-    private MemberAndBookHolder memberAndBookHolder;
+    private final MemberAndBookHolder memberAndBookHolder;
 
     @PostMapping("/register")
     public ResponseEntity<MessageResponseDTO> registerBook(@RequestBody RegisterBookForm registerBookForm) {
@@ -71,23 +63,39 @@ public class APIBookController {
             throw new NotExsistConditionException("Not Exist In Search Condition");
         }
 
+        if (memberAndBookHolder.getQueriedMember().size() > 0) {
+            memberAndBookHolder.getQueriedBook().clear();
+        }
+
         MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Search Success", HttpStatus.OK.value());
 
         if (StringUtils.hasText(searchCondition.getBookName())) {
-            List<BookDTO> bookDTOList = bookService.findBookByTitle(searchCondition.getBookName())
+            List<Book> bookList = bookService.findBookByTitle(searchCondition.getBookName());
+            int count = 1;
+            for (Book book : bookList) {
+                memberAndBookHolder.getQueriedBook().put(
+                        memberAndBookHolder.getQueriedMember()
+                                .get("selectedMember").toString()+"_" + count
+                        , book);
+
+                count = count++;
+            }
+            List<BookDTO> bookDTOList = bookList
                     .stream()
                     .map(bookService::buildBookDTO)
                     .collect(Collectors.toList());
             messageResponseDTO.setObject(bookDTOList);
         }
         if (StringUtils.hasText(searchCondition.getBookCode())) {
-            BookDTO bookDTO = bookService.buildBookDTO(bookService.findBookByCode(searchCondition.getBookCode()));
+            Book book = bookService.findBookByCode(searchCondition.getBookCode());
+            memberAndBookHolder.getQueriedBook().put(
+                    memberAndBookHolder.getQueriedMember()
+                            .get("selectedMember").toString()
+                    , book);
+
+            BookDTO bookDTO = bookService.buildBookDTO(book);
             messageResponseDTO.setObject(bookDTO);
         }
-//        if (memberAndBookHolder.getQueriedMember().size() > 0) {
-//
-//            memberAndBookHolder.getQueriedMember().put("selectedMember", b);
-//        }
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));

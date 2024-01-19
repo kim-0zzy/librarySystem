@@ -14,20 +14,16 @@ import com.example.libraryProject.Exception.NotExsistConditionException;
 import com.example.libraryProject.Service.MemberService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.beans.NullValueInNestedPathException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.Charset;
+
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
@@ -39,9 +35,7 @@ import java.util.stream.Collectors;
 public class APIMemberController {
 
     private final MemberService memberService;
-
-    @Autowired
-    private MemberAndBookHolder memberAndBookHolder;
+    private final MemberAndBookHolder memberAndBookHolder;
 
     private Long loadLoginMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
