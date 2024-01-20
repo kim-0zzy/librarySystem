@@ -3,13 +3,11 @@ package com.example.libraryProject.Controller.Borrow.Form;
 import lombok.Data;
 
 @Data
-public class ResponseBorrowDTO {
-    private String memberName;
+public class withoutMemberResponseBorrowDTO {
     private String bookName;
     private String bookCode;
 
-    public ResponseBorrowDTO(String memberName, String bookName, String bookCode) {
-        this.memberName = memberName;
+    public withoutMemberResponseBorrowDTO(String bookName, String bookCode) {
         this.bookName = bookName;
         this.bookCode = bookCode;
     }
