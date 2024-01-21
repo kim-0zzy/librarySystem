@@ -8,6 +8,9 @@ import com.example.libraryProject.DTO.SearchCondition;
 import com.example.libraryProject.Entity.Book;
 import com.example.libraryProject.Entity.Borrow;
 import com.example.libraryProject.Entity.Member;
+import com.example.libraryProject.Exception.NotExistConditionException;
+import com.example.libraryProject.Exception.NotFoundResultException;
+import com.example.libraryProject.Exception.NotScannedException;
 import com.example.libraryProject.Service.BookService;
 import com.example.libraryProject.Service.BorrowService;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +37,16 @@ public class APIBorrowController {
     private final MemberAndBookHolder memberAndBookHolder;
 
     @PostMapping("/rental")
-    public ResponseEntity<MessageResponseDTO> rental() {
+    public ResponseEntity<MessageResponseDTO> rental() throws NotScannedException {
+        if (memberAndBookHolder.getQueriedMember().isEmpty()) {
+            throw new NotScannedException("Member is not Scan. Please scan Member");
+        }
+        if (memberAndBookHolder.getQueriedBook().isEmpty()) {
+            throw new NotScannedException("Books are not Scan. Please scan Books");
+        }
 
         Member member = memberAndBookHolder.getQueriedMember().get("selectedMember");
+
         List<Book> bookList = new ArrayList<>();
         List<ResponseBorrowDTO> responseBorrowDTOList = new ArrayList<>();
 
@@ -62,13 +72,24 @@ public class APIBorrowController {
     }
 
     @PostMapping("/giveBack")
-    public ResponseEntity<MessageResponseDTO> giveBack(@RequestBody SearchCondition searchCondition) {
+    public ResponseEntity<MessageResponseDTO> giveBack(@RequestBody SearchCondition searchCondition)
+            throws NotExistConditionException, NotFoundResultException {
+
+        if (searchCondition.getBookCode().isEmpty()) {
+            throw new NotExistConditionException("Search Condition is Empty. Please Input BookCode");
+        }
+
         Book book = bookService.findBookByCode(searchCondition.getBookCode());
+
+        if (book == null) {
+            throw new NotFoundResultException("Result is Not Found. Please Retry other Code");
+        }
+
         borrowService.deleteBorrow(searchCondition);
         book.toggleState();
 
         MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Return Success", HttpStatus.CREATED.value(),
-                new withoutMemberResponseBorrowDTO(book.getName(), book.getCode()));
+                new withoutMemberResponseBorrowDTO(book.getName(), book.getCode(), book.isState()));
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));

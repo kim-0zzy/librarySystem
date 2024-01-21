@@ -6,9 +6,11 @@ import lombok.Data;
 public class withoutMemberResponseBorrowDTO {
     private String bookName;
     private String bookCode;
+    private Boolean bookState;
 
-    public withoutMemberResponseBorrowDTO(String bookName, String bookCode) {
+    public withoutMemberResponseBorrowDTO(String bookName, String bookCode, Boolean bookState) {
         this.bookName = bookName;
         this.bookCode = bookCode;
+        this.bookState = bookState;
     }
 }

@@ -10,7 +10,8 @@ import com.example.libraryProject.DTO.SearchCondition;
 import com.example.libraryProject.Entity.Address;
 import com.example.libraryProject.Entity.Member;
 import com.example.libraryProject.Exception.ExistMemberException;
-import com.example.libraryProject.Exception.NotExsistConditionException;
+import com.example.libraryProject.Exception.NotExistConditionException;
+import com.example.libraryProject.Exception.NotFoundResultException;
 import com.example.libraryProject.Service.MemberService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -96,10 +97,11 @@ public class APIMemberController {
     }
 
     @GetMapping("/members/searchOne")
-    public ResponseEntity<MessageResponseDTO> searchMember(@RequestBody SearchCondition searchCondition) throws NotExsistConditionException {
+    public ResponseEntity<MessageResponseDTO> searchMember(@RequestBody SearchCondition searchCondition)
+            throws NotExistConditionException, NotFoundResultException {
         if (!(StringUtils.hasText(searchCondition.getMemberCode()) ||
                 (StringUtils.hasText(searchCondition.getMemberName()) && StringUtils.hasText(searchCondition.getMemberTel())))) {
-            throw new NotExsistConditionException("Not Exist In Search Condition ");
+            throw new NotExistConditionException("Not Exist In Search Condition ");
         }
 
         Member member = null;
@@ -109,6 +111,9 @@ public class APIMemberController {
         }
         if (StringUtils.hasText(searchCondition.getMemberName()) && StringUtils.hasText(searchCondition.getMemberTel())) {
             member = memberService.findMemberByUsernameAndTel(searchCondition.getMemberName(), searchCondition.getMemberTel());
+        }
+        if (member == null) {
+            throw new NotFoundResultException("Member is null");
         }
 
         MessageResponseDTO messageResponseDTO = new MessageResponseDTO("Search Success", HttpStatus.OK.value(),

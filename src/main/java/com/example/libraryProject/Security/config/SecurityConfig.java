@@ -39,10 +39,6 @@ public class SecurityConfig {
     public AuthenticationFailureHandler failureHandler() {
         return new CustomAuthenticationFailureHandler();
     }
-//    @Bean
-//    public LogoutSuccessHandler logoutSuccessHandler() {
-//        return new CustomLogoutSuccessHandler();
-//    }
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());

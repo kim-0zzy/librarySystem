@@ -5,6 +5,7 @@ import com.example.libraryProject.DTO.ManagerDTO;
 import com.example.libraryProject.DTO.MessageResponseDTO;
 import com.example.libraryProject.Entity.Manager;
 
+import com.example.libraryProject.Exception.NotFoundResultException;
 import com.example.libraryProject.Service.ManagerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -43,6 +44,7 @@ public class APIManagerController {
                     "Exist Manager Failure", HttpStatus.BAD_REQUEST.value(), signUpManagerForm.getManagerName()),
                     httpHeaders, HttpStatus.BAD_REQUEST);
         }
+
         Manager manager = new Manager(signUpManagerForm.getManagerName(), signUpManagerForm.getRealName(),
                 passwordEncoder.encode(signUpManagerForm.getPassword()));
         managerService.join_Manager(manager);
@@ -68,9 +70,14 @@ public class APIManagerController {
     }
 
     @GetMapping("/apiManager/findOne")
-    public ResponseEntity<MessageResponseDTO> findOneManager(@RequestParam String managerName) {
+    public ResponseEntity<MessageResponseDTO> findOneManager(@RequestParam String managerName) throws NotFoundResultException {
+        Manager manager = managerService.findManagerByName(managerName);
 
-        ManagerDTO managerDTO = managerService.buildManager(managerService.findManagerByName(managerName));
+        if (manager == null) {
+            throw new NotFoundResultException("manager is not Founded");
+        }
+
+        ManagerDTO managerDTO = managerService.buildManager(manager);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
