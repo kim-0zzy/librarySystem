@@ -1,7 +1,6 @@
 package com.example.libraryProject.Repository.JPQL;
 
 import com.example.libraryProject.Entity.Member;
-import com.example.libraryProject.Exception.NotFoundResultException;
 import com.example.libraryProject.Repository.MemberRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;

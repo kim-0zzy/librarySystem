@@ -1,7 +1,6 @@
 package com.example.libraryProject.Repository;
 
 import com.example.libraryProject.Entity.Member;
-import com.example.libraryProject.Exception.NotFoundResultException;
 
 import java.util.List;
 import java.util.Optional;

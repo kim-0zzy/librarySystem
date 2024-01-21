@@ -1,6 +1,5 @@
 package com.example.libraryProject.DTO;
 
-import com.example.libraryProject.Entity.Book;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

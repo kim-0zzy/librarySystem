@@ -3,7 +3,6 @@ package com.example.libraryProject.Repository.JPQL;
 import com.example.libraryProject.DTO.ReturnBorrowDTO;
 import com.example.libraryProject.DTO.SearchCondition;
 import com.example.libraryProject.Entity.Borrow;
-import com.example.libraryProject.Exception.NotFoundResultException;
 import com.example.libraryProject.Repository.BorrowRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;

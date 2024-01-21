@@ -3,7 +3,6 @@ package com.example.libraryProject.Repository;
 import com.example.libraryProject.DTO.ReturnBorrowDTO;
 import com.example.libraryProject.DTO.SearchCondition;
 import com.example.libraryProject.Entity.Borrow;
-import com.example.libraryProject.Exception.NotFoundResultException;
 
 import java.util.List;
 import java.util.Optional;

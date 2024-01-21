@@ -1,6 +1,7 @@
 package com.example.libraryProject.Security.provider;
 
 import com.example.libraryProject.Security.ManagerContext;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,12 +13,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    public UserDetailsService userDetailsService;
-    @Autowired
-    public PasswordEncoder passwordEncoder;
+    public final UserDetailsService userDetailsService;
+
+    public final PasswordEncoder passwordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

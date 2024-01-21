@@ -1,26 +1,20 @@
 package com.example.libraryProject.Controller.Manager;
 
-import com.example.libraryProject.Controller.Manager.Form.LoginManagerForm;
-import com.example.libraryProject.Controller.Manager.Form.ResponseManagerForm;
 import com.example.libraryProject.Controller.Manager.Form.SignUpManagerForm;
 import com.example.libraryProject.DTO.ManagerDTO;
 import com.example.libraryProject.DTO.MessageResponseDTO;
 import com.example.libraryProject.Entity.Manager;
-import com.example.libraryProject.Exception.ExistMemberException;
+
 import com.example.libraryProject.Service.ManagerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -37,15 +31,6 @@ public class APIManagerController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-//    @Autowired
-//    private AuthenticationManager authenticationManager;
-
-    private Long loadLoginManager() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        Member member = (Member)authentication.getPrincipal();
-//        return member.getId();
-        return null;
-    }
 
     @PostMapping("/apiManager/signUp")
     public ResponseEntity<MessageResponseDTO> signUpManager(@RequestBody SignUpManagerForm signUpManagerForm) {
@@ -66,31 +51,6 @@ public class APIManagerController {
 
         return new ResponseEntity<>(new MessageResponseDTO("Register Success", HttpStatus.OK.value(), managerDTO), httpHeaders, HttpStatus.OK);
     }
-
-//    @PostMapping("/login-proc") // 잘 생각해보기 !!
-//    public ResponseEntity<MessageResponseDTO> loginManager(@RequestBody LoginManagerForm loginManagerForm) {
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-//
-//        try {
-//
-//            Authentication authentication = new UsernamePasswordAuthenticationToken(loginManagerForm.getManagerName(), passwordEncoder.encode(loginManagerForm.getPassword()));
-//
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//            Authentication findAuthentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//            Manager manager = (Manager) findAuthentication.getPrincipal();
-//
-//
-//            return new ResponseEntity<>(
-//                    new MessageResponseDTO(
-//                            "Login Success", HttpStatus.OK.value(), new ResponseManagerForm(manager.getRealName(), manager.getRole())),
-//                    httpHeaders, HttpStatus.OK);
-//        } catch (AuthenticationException e) {
-//            return new ResponseEntity<>(new MessageResponseDTO("Login Failure", HttpStatus.BAD_REQUEST.value()), httpHeaders, HttpStatus.BAD_REQUEST);
-//        }
-//    }
 
     @GetMapping("/logout")
     public ResponseEntity<MessageResponseDTO> logout(HttpServletRequest request, HttpServletResponse response) throws IOException {

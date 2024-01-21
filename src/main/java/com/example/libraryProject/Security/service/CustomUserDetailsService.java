@@ -17,7 +17,6 @@ import java.util.Optional;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final ManagerRepository managerRepository;
-    private final PasswordEncoder passwordEncoder;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Manager manager = managerRepository.findByName(username).orElseThrow(() -> new UsernameNotFoundException("UserName Is NotFound"));
@@ -26,12 +25,5 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .password(manager.getPassword())
                 .roles(manager.getRole())
                 .build();
-
-//        Optional<Manager> searchManager = managerRepository.findByName(username);
-//
-//        if(!searchManager.isPresent()){
-//            throw new UsernameNotFoundException("UserName Is NotFound");
-//        }
-//        Manager manager = searchManager.get();
     }
 }

@@ -1,7 +1,6 @@
 package com.example.libraryProject.Repository.QueryDSL;
 
 import com.example.libraryProject.Entity.Book;
-import com.example.libraryProject.Entity.QBook;
 import com.example.libraryProject.Repository.BookRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

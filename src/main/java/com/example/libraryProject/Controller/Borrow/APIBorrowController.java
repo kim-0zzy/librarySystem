@@ -10,7 +10,6 @@ import com.example.libraryProject.Entity.Borrow;
 import com.example.libraryProject.Entity.Member;
 import com.example.libraryProject.Service.BookService;
 import com.example.libraryProject.Service.BorrowService;
-import com.example.libraryProject.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,7 +30,6 @@ import java.util.List;
 public class APIBorrowController {
 
     private final BookService bookService;
-    private final MemberService memberService;
     private final BorrowService borrowService;
     private final MemberAndBookHolder memberAndBookHolder;
 

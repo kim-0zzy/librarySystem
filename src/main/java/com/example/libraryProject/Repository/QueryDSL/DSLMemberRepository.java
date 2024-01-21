@@ -1,8 +1,6 @@
 package com.example.libraryProject.Repository.QueryDSL;
 
 import com.example.libraryProject.Entity.Member;
-import com.example.libraryProject.Entity.QMember;
-import com.example.libraryProject.Exception.NotFoundResultException;
 import com.example.libraryProject.Repository.MemberRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
